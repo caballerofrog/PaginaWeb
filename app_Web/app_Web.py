@@ -1,37 +1,51 @@
 import reflex as rx
 
-from rxconfig import config
-
-
 class State(rx.State):
-    """The app state."""
+    username: str = ""
+    password: str = ""
 
-    ...
+    def login(self):
+        # Aquí podrías agregar tu lógica de autenticación
+        if self.username == "admin" and self.password == "1234":
+            print("Inicio de sesión exitoso")
+        else:
+            print("Usuario o contraseña incorrectos")
 
-
-def index() -> rx.Component:
-    # Welcome Page (Index)
-    return rx.container(
-        rx.color_mode.button(position="top-right"),
-        rx.vstack(
-            rx.heading("Welcome to Reflex!", size="9"),
-            rx.text(
-                "Get started by editing ",
-                rx.code(f"{config.app_name}/{config.app_name}.py"),
-                size="5",
+def login_page() -> rx.Component:
+    return rx.center(
+        rx.box(
+            rx.heading("Iniciar Sesión", size="lg", mb="4"),
+            rx.input(
+                placeholder="Usuario",
+                value=State.username,
+                on_change=State.set_username,
+                mb="3",
+                width="100%"
             ),
-            rx.link(
-                rx.button("Check out our docs!"),
-                href="https://reflex.dev/docs/getting-started/introduction/",
-                is_external=True,
+            rx.input(
+                placeholder="Contraseña",
+                type_="password",
+                value=State.password,
+                on_change=State.set_password,
+                mb="3",
+                width="100%"
             ),
-            spacing="5",
-            justify="center",
-            min_height="85vh",
+            rx.button(
+                "Entrar",
+                on_click=State.login,
+                color_scheme="teal",
+                width="100%"
+            ),
+            padding="6",
+            box_shadow="lg",
+            border_radius="md",
+            width="300px",
+            background_color="white"
         ),
-        rx.logo(),
+        height="100vh",
+        background_color="#f0f4f8"
     )
 
-
 app = rx.App()
-app.add_page(index)
+app.add_page(login_page)
+app.compile()
