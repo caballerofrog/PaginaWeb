@@ -1,14 +1,40 @@
 import psycopg2
+from dotenv import load_dotenv
+import os
 
+# Load environment variables from .env
+load_dotenv()
 
+# Fetch variables
+USER = os.getenv("postgres")
+PASSWORD = os.getenv("-SrM@gus123-")
+HOST = os.getenv("db.cjyzztlyyvlgbkfaifvc.supabase.co")
+PORT = os.getenv("5432")
+DBNAME = os.getenv("postgres")
+
+# Connect to the database
 try:
-    conexion = psycopg2.connect(
-        host = "db.cjyzztlyyvlgbkfaifvc.supabase.co",
-        user = "postgres",
-        password = "-SrM@gus123-",
-        database = "postgres",
-        port = "5432"
+    connection = psycopg2.connect(
+        user=USER,
+        password=PASSWORD,
+        host=HOST,
+        port=PORT,
+        dbname=DBNAME
     )
-    print("✅ Conexion exitosa...")
-except Exception as ex:
-    print("Error: ", ex)
+    print("Connection successful!")
+    
+    # Create a cursor to execute SQL queries
+    cursor = connection.cursor()
+    
+    # Example query
+    cursor.execute("SELECT NOW();")
+    result = cursor.fetchone()
+    print("Current Time:", result)
+
+    # Close the cursor and connection
+    cursor.close()
+    connection.close()
+    print("Connection closed.")
+
+except Exception as e:
+    print(f"Failed to connect: {e}")
